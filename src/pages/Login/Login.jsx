@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import login from "../../../public/login-img.png";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../Providers/AuthProvider";
 
 const Login = () => {
   const {
@@ -13,9 +14,32 @@ const Login = () => {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const onSubmit = (data) => {
-    console.log(data);
-    Swal.fire("Login successfully");
+  const { signIn } = useContext(AuthContext);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const from = location.state?.from?.pathname || "/";
+
+  const handleLogin = (data) => {
+    const { email, password } = data;
+
+    signIn(email, password)
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Login successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        navigate(from, { replace: true });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -40,7 +64,7 @@ const Login = () => {
           </div>
           <div className="w-full md:w-1/2">
             <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
-            <form onSubmit={handleSubmit(onSubmit)} className="pt-12 pb-12">
+            <form onSubmit={handleSubmit(handleLogin)} className="pt-12 pb-12">
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">
                   Email:
@@ -48,6 +72,7 @@ const Login = () => {
                 <input
                   type="email"
                   name="email"
+                  defaultValue="shahid@hasan.com"
                   className="w-full p-2 border rounded-md"
                   {...register("email", { required: true })}
                 />
@@ -64,6 +89,7 @@ const Login = () => {
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
+                  defaultValue="123456@"
                   className="w-full p-2 border rounded-md"
                   {...register("password", { required: true })}
                 />

@@ -1,6 +1,19 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../../Providers/AuthProvider";
+import photo from "../../../../public/profile-3.png";
 
 const Navbar = () => {
+  const { user, logOut } = useContext(AuthContext);
+
+  const handleLogOut = () => {
+    logOut()
+      .then(() => {})
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const navOptions = (
     <>
       <li className="font-bold active:!container: bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-tr-3xl">
@@ -52,9 +65,27 @@ const Navbar = () => {
           <ul className="menu menu-horizontal px-1">{navOptions}</ul>
         </div>
         <div className="navbar-end pr-4">
-          <Link to="/login">
-            <button>Login</button>
-          </Link>
+          {user ? (
+            <>
+              <button
+                onClick={handleLogOut}
+                className="btn btn-active btn-ghost btn-sm"
+              >
+                Log Out
+              </button>
+              <div className="avatar">
+                <div className="w-10 ms-4 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                  <img src={user?.photoURL || photo} />
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="btn btn-active btn-ghost">
+                Login
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </div>
