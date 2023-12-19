@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 const Navbar = () => {
   const navOptions = (
     <>
-      <li className="font-bold active:!container: bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
+      <li className="font-bold active:!container: bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-tr-3xl">
         <Link to="/">Home</Link>
       </li>
-      <li className="font-bold active:!container: bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
+      <li className="font-bold active:!container: bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-tr-3xl">
         <Link to="/">Classes</Link>
       </li>
     </>
@@ -52,7 +52,9 @@ const Navbar = () => {
           <ul className="menu menu-horizontal px-1">{navOptions}</ul>
         </div>
         <div className="navbar-end pr-4">
-          <button>Login</button>
+          <Link to="/login">
+            <button>Login</button>
+          </Link>
         </div>
       </div>
     </div>
